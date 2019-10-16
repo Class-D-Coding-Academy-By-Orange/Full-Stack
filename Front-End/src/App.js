@@ -35,7 +35,10 @@ class App extends React.Component {
     // dont use this.state=value
     axios.get(`http://localhost:9000/edit/${ID}`)
     .then(array=>{
-      console.log(array.data);
+      // console.log(array.data);
+      this.setState({
+        todos : array.data
+      })
     })
     // let newState = this.state.todos.map((elem, i) => {
     //   if (ID === elem.id) {
