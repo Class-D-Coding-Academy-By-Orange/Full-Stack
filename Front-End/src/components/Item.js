@@ -27,7 +27,6 @@ export default class Item extends Component {
           </span>
         </p>
         <button onClick={() => rahrah(id)}>X</button>
-        {/* <button onClick ={rahrah.bind(id)} >X</button> */}
       </div>
     );
   }
