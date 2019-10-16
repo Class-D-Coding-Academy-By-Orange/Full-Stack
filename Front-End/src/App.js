@@ -25,26 +25,35 @@ class App extends React.Component {
       }
     ]
   };
+  componentDidMount(){
+    this.getRequest()
+  }
+
   edit = ID => {
     // console.log('this:', ID);
-    console.log('called Edit Function From App Comp', ID);
+    // console.log('called Edit Function From App Comp=>', ID);
     // dont use this.state=value
-    let newState = this.state.todos.map((elem, i) => {
-      if (ID === elem.id) {
-        elem.isCompleted = !elem.isCompleted;
-      }
-      return elem;
-    });
-    this.setState({ todos: newState });
+    axios.get(`http://localhost:9000/edit/${ID}`)
+    .then(array=>{
+      console.log(array.data);
+    })
+    // let newState = this.state.todos.map((elem, i) => {
+    //   if (ID === elem.id) {
+    //     elem.isCompleted = !elem.isCompleted;
+    //   }
+    //   return elem;
+    // });
+    // this.setState({ todos: newState });
   };
 
   deleteItem = ID => {
     console.log('id', ID);
-    let newState = this.state.todos.filter((elem, i) => {
-      // return false
-      return ID !== elem.id;
-    });
-    this.setState({ todos: newState });
+    axios.delete(`http://localhost:9000/delete/${ID}`)
+    .then(array=>{
+     this.setState({
+       todos : array.data
+     })
+    })
   };
   getRequest = () => {
     console.log('get request called');
@@ -63,9 +72,14 @@ class App extends React.Component {
 
   // item like {id:77, title : "eat" , isCompleted : false}
   addItem = item => {
-    let newState = this.state.todos;
-    newState.push(item);
-    this.setState({ todos: newState });
+    // console.log(item.title);
+   axios.post("http://localhost:9000/addNewTask", item )
+   .then(item=>{
+     this.setState({
+      todos: item.data
+     })
+   }) 
+
   };
 
   render() {
@@ -90,7 +104,7 @@ class App extends React.Component {
 
         <br />
         <Add addItem={addItem} />
-        <List toggle={edit} todos={todos} deldel={deleteItem} />
+        <List toggle={edit} todos={todos} deldel={deleteItem}  />
         {/* <h6>App component1</h6> */}
         {/* <h1>{todos[1].title}</h1> */}
       </div>

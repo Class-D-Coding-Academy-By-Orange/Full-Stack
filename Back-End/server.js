@@ -30,10 +30,16 @@ app.post('/addNewTask', (req, res) => {
 });
 
 app.delete('/delete/:id', (req, res) => {
+  console.log("req params " , req.params);
   DB.remove(result => {
     res.json(result);
   }, req.params.id);
 });
-
+app.get('/edit/:id', (req,res)=>{
+  console.log("edit Server");
+  DB.edit(result=>{
+    res.json(result)
+  },req.params.id)
+});
 const PORT = 9000;
 app.listen(PORT, () => console.log(`Server listening to ${PORT}`));

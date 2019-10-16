@@ -8,7 +8,7 @@ export default class Item extends Component {
   render() {
     const { toggleIsCompleted } = this;
     const { rahrah, todo } = this.props;
-    const { id, title, isCompleted } = todo;
+    const { _id, title, isCompleted } = todo;
     // const { toggleChild } = this.props;
 
     return (
@@ -23,10 +23,10 @@ export default class Item extends Component {
           <span
             style={{ textDecoration: isCompleted ? 'line-through' : 'none' }}
           >
-            {id}. {title}
+            {_id}. {title}
           </span>
         </p>
-        <button onClick={() => rahrah(id)}>X</button>
+        <button onClick={() => rahrah(_id)}>X</button>
         {/* <button onClick ={rahrah.bind(id)} >X</button> */}
       </div>
     );

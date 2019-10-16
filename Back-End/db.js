@@ -43,10 +43,43 @@ let insertTask = (cb, obj) => {
 };
 
 let removeOne = (cb, ID) => {
-  cb('DATABASE AFTER REMOVE');
+  console.log(ID);
+  Tasks.findByIdAndRemove(ID,(err,removeTask)=>{
+    if(err){
+      console.log("err", err);
+    }
+    console.log("removeTask" , removeTask);
+    getTasks(cb);
+  })
 };
+let editOne = (cb,ID) =>{
+  console.log("Edit DB");
+  console.log(ID);
+  // var a;
+  // Tasks.findByIdAndUpdate(ID,(err,editedTask)=>{
+    let isComplete = Tasks.findById(ID,(a,b)=>
+    {
+      let status = !b.isCompleted;
+      // console.log(status);
+
+        
+    Tasks.updateOne({_id:ID},{isCompleted : status  },(err,editedTask)=>{
+    if(err){
+      console.log(err);
+    }
+    console.log(editedTask);
+   
+    getTasks(cb)
+  })
+    });
+
+    // console.log(isComplete);
+    // console.log(a);
+
+}
 module.exports = {
   abeer: getTasks,
   insert: insertTask,
-  remove: removeOne
+  remove: removeOne,
+  edit : editOne
 };
