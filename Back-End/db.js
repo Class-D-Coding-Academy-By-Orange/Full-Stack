@@ -30,10 +30,7 @@ let getTasks = cb => {
 let insertTask = (cb, obj) => {
   console.log('OBJ:', obj);
   console.log('INSERT TASK TO DATABASE');
-  Tasks.insertMany([{ title: obj.title, isCompleted: false }], function(
-    err,
-    NewTask
-  ) {
+  Tasks.insertMany([{ title: obj.title, isCompleted: false }], function(err,NewTask) {
     if (err) {
       console.log('ERR:', err);
     }
@@ -42,11 +39,36 @@ let insertTask = (cb, obj) => {
   });
 };
 
+let editOne = ( cb , ID )=>{
+  
+  console.log('edit :', ID);
+
+   Tasks.findById(ID , (x,y)=>{
+    let updateStatus = !y.isCompleted;
+
+    Tasks.updateOne({_id:ID},{ isCompleted: updateStatus},(err,Edit)=>{
+      if(err){console.log(err);}
+      getTasks(cb)
+    })
+  })
+
+}
+
 let removeOne = (cb, ID) => {
+  console.log('IDDB :', ID);
+  Tasks.findByIdAndRemove(ID,(err,removeID)=>{
+    if (err){
+      console.log('ERR:', err);
+    }
+    console.log(removeID);
+    getTasks(cb)
+  })
   cb('DATABASE AFTER REMOVE');
+
 };
 module.exports = {
   abeer: getTasks,
   insert: insertTask,
-  remove: removeOne
+  remove: removeOne,
+  edit:editOne
 };
