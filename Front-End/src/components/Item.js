@@ -1,34 +1,34 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 export default class Item extends Component {
   toggleIsCompleted = () => {
-    console.log('toggleIsCompleted called From Item Component');
-    this.props.toggleChild(this.props.todo.id);
+    this.props.toggleChild(this.props.todo._id);
   };
   render() {
     const { toggleIsCompleted } = this;
-    const { rahrah, todo } = this.props;
-    const { id, title, isCompleted } = todo;
-    // const { toggleChild } = this.props;
+    const { deleteItem, todo } = this.props;
+    const { _id, title, isCompleted } = todo;
 
     return (
-      <div style={{ border: '3px red solid' }}>
+      <div style={{ padding: "15px" }}>
+        <hr />
         <p>
           <input
             onClick={toggleIsCompleted}
             type="checkbox"
             defaultChecked={isCompleted}
           />
-
           <span
-            style={{ textDecoration: isCompleted ? 'line-through' : 'none' }}
+            style={{ textDecoration: isCompleted ? "line-through" : "none" }}
           >
-            {id}. {title}
+            {title}
           </span>
+          <div style={{ float:"right" }}>
+          <button style={{ backgroundColor: "red" }} onClick={() => deleteItem(_id)}>	&#128465;</button>
+          </div>
         </p>
-        <button onClick={() => rahrah(id)}>X</button>
-        {/* <button onClick ={rahrah.bind(id)} >X</button> */}
       </div>
     );
+    
   }
 }
