@@ -42,11 +42,18 @@ let insertTask = (cb, obj) => {
   });
 };
 
-let removeOne = (cb, ID) => {
-  cb('DATABASE AFTER REMOVE');
-};
+let removeOne = (cb, _ID) => {
+  console.log(_ID);
+    Tasks.findByIdAndRemove({ "_id" : _ID }, function(err) {
+      if (err){
+        console.log('ERR:', err);
+      }
+    });
+    getTasks(cb);
+  };
 module.exports = {
   abeer: getTasks,
   insert: insertTask,
-  remove: removeOne
+  remove: removeOne,
+  
 };

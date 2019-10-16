@@ -29,10 +29,11 @@ app.post('/addNewTask', (req, res) => {
   }, box);
 });
 
-app.delete('/delete/:id', (req, res) => {
+
+app.delete('/delete/:_id', (req, res) => {
   DB.remove(result => {
     res.json(result);
-  }, req.params.id);
+  }, req.params._id);
 });
 
 const PORT = 9000;
