@@ -1,59 +1,76 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/toDoList16-10', {
+//========================================Connection===========================================//
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost/toDoList16-10", {
   useNewUrlParser: true
 });
 const db = mongoose.connection;
-db.on('error', function() {
-  console.log('mongoose connection error');
-  console.log('____________________________');
+db.on("error", function() {
+  console.log("mongoose connection error");
+  console.log("____________________________");
 });
-db.once('open', function() {
-  console.log('mongoose connected successfully');
-  console.log('____________________________');
+db.once("open", function() {
+  console.log("mongoose connected successfully");
+  console.log("____________________________");
 });
+
+//========================================Schema===============================================//
 let tasksSchema = new mongoose.Schema({
   title: String,
   isCompleted: Boolean
 });
-let Tasks = mongoose.model('tasks', tasksSchema);
-let getTasks = cb => {
-  console.log('GET TASKS FROM DATABASE');
+
+let Tasks = mongoose.model("tasks", tasksSchema);
+//=========================================GET=================================================//
+
+const get = cb => {
   Tasks.find({}, function(err, docs) {
     if (err) {
-      console.log('ERR:', err);
+      console.log("ERR:", err);
     }
-    console.log('DOCS:', docs);
     cb(docs);
   });
 };
+//=========================================ADD=================================================//
 
-let insertTask = (cb, obj) => {
-  console.log('OBJ:', obj);
-  console.log('INSERT TASK TO DATABASE');
+const add = (cb, obj) => {
   Tasks.insertMany([{ title: obj.title, isCompleted: false }], function(
     err,
     NewTask
   ) {
     if (err) {
-      console.log('ERR:', err);
+      console.log("ERR:", err);
     }
-    console.log('NEWTASK:', NewTask);
-    getTasks(cb);
+    get(cb);
   });
 };
+//=========================================DEL=================================================//
 
-let removeOne = (cb, _ID) => {
-  console.log(_ID);
-    Tasks.findByIdAndRemove({ "_id" : _ID }, function(err) {
-      if (err){
-        console.log('ERR:', err);
+const del = (cb, ID) => {
+  Tasks.findByIdAndRemove(ID, (err, removeTask) => {
+    if (err) {
+      console.log("err", err);
+    }
+    get(cb);
+  });
+};
+//=========================================EDIT=================================================//
+
+const edit = (cb, ID) => {
+   Tasks.findById(ID, (a, b) => {
+    let status = !b.isCompleted;
+    Tasks.updateOne({ _id: ID }, { isCompleted: status }, (err, editedTask) => {
+      if (err) {
+        console.log(err);
       }
+      get(cb);
     });
-    getTasks(cb);
-  };
+  });
+};
+//=====================================MODULE EXPORTS=============================================//
+
 module.exports = {
-  abeer: getTasks,
-  insert: insertTask,
-  remove: removeOne,
-  
+  get,
+  add,
+  del,
+  edit
 };
