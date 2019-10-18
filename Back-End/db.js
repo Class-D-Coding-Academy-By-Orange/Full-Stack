@@ -11,11 +11,21 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
   console.log('____________________________');
 });
+
+
+
+
+
 let tasksSchema = new mongoose.Schema({
   title: String,
   isCompleted: Boolean
 });
 let Tasks = mongoose.model('tasks', tasksSchema);
+
+
+
+
+
 let getTasks = cb => {
   console.log('GET TASKS FROM DATABASE');
   Tasks.find({}, function(err, docs) {
@@ -26,6 +36,10 @@ let getTasks = cb => {
     cb(docs);
   });
 };
+
+
+
+
 
 let insertTask = (cb, obj) => {
   console.log('OBJ:', obj);
@@ -42,11 +56,50 @@ let insertTask = (cb, obj) => {
   });
 };
 
+
+
+
+
+
 let removeOne = (cb, ID) => {
-  cb('DATABASE AFTER REMOVE');
-};
+  console.log('ID:', ID);
+
+  Tasks.deleteOne({ _id: ID }, (err,data)=>{
+    if(err){
+      console.log('ERR:', err);
+    }
+    getTasks(cb);
+  }
+  )
+  };
+
+
+
+  let updateon = (cb, ID) => {
+    Tasks.findOne({ _id: ID }, (err, docs) => {
+      if (err) {
+        console.log("ERR : ", err);
+      }
+        Tasks.updateOne(
+          { _id: ID },
+          { $set: { isCompleted: !docs.isCompleted } },
+          err => {
+            if (err) {
+              console.log("ERR : ", err);
+            } else {
+              getTasks(cb);
+            }
+          }
+        );
+    });
+  };
+
+
+
+
 module.exports = {
   abeer: getTasks,
   insert: insertTask,
-  remove: removeOne
+  remove: removeOne,
+  update:updateon
 };
