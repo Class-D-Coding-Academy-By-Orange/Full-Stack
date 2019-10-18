@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const DB = require('./db');
 const app = express();
+
 app.use(cors());
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -20,6 +21,12 @@ app.get('/data', (req, res) => {
   });
 });
 
+app.put("/edit/:id", (req, res) => {
+  DB.update(result => {
+    res.json(result);
+  }, req.params.id);
+});
+
 app.post('/addNewTask', (req, res) => {
   let box = req.body;
   console.log('BOX:', box);
@@ -29,11 +36,12 @@ app.post('/addNewTask', (req, res) => {
   }, box);
 });
 
-app.delete('/delete/:id', (req, res) => {
+app.delete("/delete/:id", (req, res) => {
   DB.remove(result => {
     res.json(result);
   }, req.params.id);
 });
 
-const PORT = 9000;
+
+const PORT = 4000;
 app.listen(PORT, () => console.log(`Server listening to ${PORT}`));

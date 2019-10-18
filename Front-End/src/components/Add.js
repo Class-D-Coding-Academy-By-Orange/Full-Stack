@@ -6,7 +6,7 @@ export default class Add extends Component {
   };
 
   addNewTask = () => {
-    let newTask = { id: 77, title: this.state.title, isCompleted: false };
+    let newTask = { title: this.state.title, isCompleted: false };
     this.props.addItem(newTask);
     this.setState({title:""})
   };
