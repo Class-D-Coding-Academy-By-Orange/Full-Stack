@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import Item from './Item'
-export default class List extends Component {
- 
-
-  render() {
-    const {todos,toggle,deldel} = this.props; 
+//======================================IMPORT===============================================//
+import React from "react";
+import Item from "./Item";
+//====================================COMPONENT==============================================//
+const List = ({ todos, toggle, del })=>  {
     return (
-      <div style={{ border: '3px green dotted' }}>
-        {/* <h6>List</h6> */}
-      {
-        todos.map((todo,index)=>{
-          return (<Item key={todo.id} todo={todo} rahrah={deldel} toggleChild={toggle}/>)
-        })
-      }
-       
-
+      <div>
+        {todos.map(todo => {
+          return (
+            <Item
+              key={todo._id}
+              todo={todo}
+              del={del}
+              toggleChild={toggle.bind(this, todo._id)}
+            />
+          );
+        })}
       </div>
     );
   }
-}
+export default List;

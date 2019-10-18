@@ -1,31 +1,42 @@
-import React, { Component } from 'react';
-
+//========================================IMPORT===============================================//
+import React, { Component } from "react";
+import "../App.css";
+//=====================================ADD COMPONENT===========================================//
 export default class Add extends Component {
   state = {
-    title: ''
+    title: ""
   };
+  //===================================ADD NEW TASK============================================//
 
   addNewTask = () => {
-    let newTask = { id: 77, title: this.state.title, isCompleted: false };
-    this.props.addItem(newTask);
-    this.setState({title:""})
+    if (this.state.title === "") {
+      alert("Please type something!");
+    } else {
+      let newTask = { id: 666, title: this.state.title, isCompleted: false };
+      this.props.add(newTask);
+      this.setState({ title: "" });
+    }
   };
+  //=======================================TITLE===============================================//
 
-  changeTitle = (event) => {
-    // console.log('event.target: ',event.target.value);
-    this.setState({title:event.target.value})
+  changeTitle = event => {
+    this.setState({ title: event.target.value });
   };
+  //======================================RENDER===============================================//
   render() {
-    const { state, addNewTask, changeTitle } = this;
+    const {addNewTask, changeTitle } = this;
     return (
-      <div style={{ border: '3px orange solid' }}>
+      <div>
         <input
           type="text"
+          className="inputrino"
           value={this.state.title}
           onChange={changeTitle}
-          placeholder="Insert New ToDo"
+          placeholder="Buy Coffee .."
         />
-        <button onClick={addNewTask}>Submit</button>
+        <button className="addButton" onClick={addNewTask}>
+          Add
+        </button>
       </div>
     );
   }
