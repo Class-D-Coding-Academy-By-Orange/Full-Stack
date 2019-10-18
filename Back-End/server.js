@@ -3,7 +3,7 @@ const cors = require('cors');
 const DB = require('./db');
 const app = express();
 app.use(cors());
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
@@ -29,10 +29,16 @@ app.post('/addNewTask', (req, res) => {
   }, box);
 });
 
-app.delete('/delete/:id', (req, res) => {
+app.delete('/delete/:_id', (req, res) => {
   DB.remove(result => {
     res.json(result);
-  }, req.params.id);
+  }, req.params._id);
+});
+
+app.put('/edit/:_id', (req, res) => {
+  DB.update(result => {
+    res.json(result);
+  }, req.params._id);
 });
 
 const PORT = 9000;
