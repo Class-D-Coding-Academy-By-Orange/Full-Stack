@@ -14,25 +14,36 @@ app.use(function(req, res, next) {
 app.use(express.json());
 
 app.get('/data', (req, res) => {
-  DB.abeer(baba => {
-    console.log('CALL BACK FROM SERVER');
-    res.json(baba);
+  DB.getdata(fromDB => {
+    // console.log('CALL BACK FROM SERVER');
+    res.json(fromDB);
   });
 });
 
 app.post('/addNewTask', (req, res) => {
   let box = req.body;
-  console.log('BOX:', box);
-  DB.insert(baba => {
-    console.log('CALL BACK FROM SERVER');
-    res.json(baba);
+  // console.log('BOX:', box);
+  DB.insert(insFromDB => {
+    // console.log('CALL BACK FROM SERVER');
+    res.json(insFromDB);
   }, box);
 });
 
-app.delete('/delete/:id', (req, res) => {
-  DB.remove(result => {
+app.delete("/delete/:id", (req, res) => {
+  // console.log(req.params);
+  DB.remove1(result => {
     res.json(result);
   }, req.params.id);
+  // console.log(req.params.id);
+});
+
+// 
+app.put('/edit/:id', (req, res) => {
+  // console.log(req.params.id);
+  DB.edit(result => {
+    res.json(result);
+  }, req.params.id);
+  // console.log(req.params.id);
 });
 
 const PORT = 9000;
