@@ -14,10 +14,8 @@ app.use(function(req, res, next) {
 app.use(express.json());
 
 app.get('/data', (req, res) => {
-  DB.abeer(baba => {
-    console.log('CALL BACK FROM SERVER');
-    res.json(baba);
-  });
+  DB.abeer(baba => {console.log('CALL BACK FROM SERVER');
+  res.json(baba); });
 });
 
 app.post('/addNewTask', (req, res) => {
@@ -29,11 +27,24 @@ app.post('/addNewTask', (req, res) => {
   }, box);
 });
 
-app.delete('/delete/:id', (req, res) => {
+app.delete('/delete/:_id', (req, res) => {
+  // console.log('---------------------', req.params._id)
   DB.remove(result => {
     res.json(result);
-  }, req.params.id);
+  },req.params._id);
+  // console.log('id: ',req.params._id);
 });
+
+app.put('/edit/:_id/:isCompleted',(req,res) => {
+  let id = req.params._id
+  let isCompleted= req.params.isCompleted
+    // console.log('EDIT: ', req.params._id)
+console.log('req.params.isCompleted from server', req.params.isCompleted);
+
+  DB.edit(id,isCompleted, (result) => {
+    res.json(result)
+  })
+})
 
 const PORT = 9000;
 app.listen(PORT, () => console.log(`Server listening to ${PORT}`));
