@@ -3,11 +3,11 @@ mongoose.connect('mongodb://localhost/toDoList16-10', {
   useNewUrlParser: true
 });
 const db = mongoose.connection;
-db.on('error', function() {
+db.on('error', function () {
   console.log('mongoose connection error');
   console.log('____________________________');
 });
-db.once('open', function() {
+db.once('open', function () {
   console.log('mongoose connected successfully');
   console.log('____________________________');
 });
@@ -18,7 +18,7 @@ let tasksSchema = new mongoose.Schema({
 let Tasks = mongoose.model('tasks', tasksSchema);
 let getTasks = cb => {
   console.log('GET TASKS FROM DATABASE');
-  Tasks.find({}, function(err, docs) {
+  Tasks.find({}, function (err, docs) {
     if (err) {
       console.log('ERR:', err);
     }
@@ -30,7 +30,10 @@ let getTasks = cb => {
 let insertTask = (cb, obj) => {
   console.log('OBJ:', obj);
   console.log('INSERT TASK TO DATABASE');
-  Tasks.insertMany([{ title: obj.title, isCompleted: false }], function(
+  Tasks.insertMany([{
+    title: obj.title,
+    isCompleted: false
+  }], function (
     err,
     NewTask
   ) {
@@ -42,11 +45,54 @@ let insertTask = (cb, obj) => {
   });
 };
 
-let removeOne = (cb, ID) => {
-  cb('DATABASE AFTER REMOVE');
-};
+let removeOne = (cb, _ID) => {
+  Tasks.findByIdAndDelete({"_id":_ID}, function (
+    err
+  ) {
+    if (err) {
+      console.log('ERR:', err);
+    }
+    getTasks(cb);
+  });
+}  
+let updateOne = (cb,_ID) => {
+  Tasks.findOne({"_id": _ID}, function (err, docs){
+    if (err){
+      console.log('ERR:', err);
+    }
+    Tasks.updateOne({"_id":_ID}, {$set: {isCompleted: !docs.isCompleted } }, err => {
+      if( err){
+        console.log(err)
+      }
+      getTasks(cb);
+    })
+
+    // getTasks(cb);
+  })
+}  
+
+// let update = (cb, ID) => {
+//   Tasks.findOne({ _id: ID }, (err, docs) => {
+//     if (err) {
+//       console.log("ERR : ", err);
+//     }
+//       Tasks.updateOne(
+//         { _id: ID },
+//         { $set: { isCompleted: !docs.isCompleted } },
+//         err => {
+//           if (err) {
+//             console.log("ERR : ", err);
+//           } else {
+//             getTasks(cb);
+//           }
+//         }
+//       );
+//   });
+// };
+
 module.exports = {
   abeer: getTasks,
   insert: insertTask,
-  remove: removeOne
-};
+  remove: removeOne,
+  update:updateOne
+}

@@ -6,7 +6,7 @@ export default class Add extends Component {
   };
 
   addNewTask = () => {
-    let newTask = { id: 77, title: this.state.title, isCompleted: false };
+    let newTask = { _id: 77, title: this.state.title, isCompleted: false };
     this.props.addItem(newTask);
     this.setState({title:""})
   };
@@ -16,7 +16,7 @@ export default class Add extends Component {
     this.setState({title:event.target.value})
   };
   render() {
-    const { state, addNewTask, changeTitle } = this;
+    const {  addNewTask, changeTitle } = this;
     return (
       <div style={{ border: '3px orange solid' }}>
         <input
