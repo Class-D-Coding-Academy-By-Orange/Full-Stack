@@ -25,27 +25,41 @@ class App extends React.Component {
       }
     ]
   };
-  edit = ID => {
-    // console.log('this:', ID);
-    console.log('called Edit Function From App Comp', ID);
-    // dont use this.state=value
-    let newState = this.state.todos.map((elem, i) => {
-      if (ID === elem.id) {
-        elem.isCompleted = !elem.isCompleted;
-      }
-      return elem;
-    });
-    this.setState({ todos: newState });
+
+
+
+  edit =ID => {
+    axios
+      .put(`http://localhost:9000/edit/${ID}`)
+      .then(r => {
+        this.setState({ todos: r.data });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
+
+
+
   deleteItem = ID => {
-    console.log('id', ID);
-    let newState = this.state.todos.filter((elem, i) => {
-      // return false
-      return ID !== elem.id;
-    });
-    this.setState({ todos: newState });
+    // console.log('id', ID);
+    // let newState = this.state.todos.filter((elem, i) => {
+    //   // return false
+    //   return ID !== elem.id;
+    // });
+    // this.setState({ todos: newState });
+
+    axios.delete(`http://localost:9000/delete/${ID}`)
+    .then(r => {
+      // handle success
+      console.log(r.data);
+      this.setState({ todos: r.data });
+    })
   };
+
+
+
   getRequest = () => {
     console.log('get request called');
     axios
@@ -61,12 +75,20 @@ class App extends React.Component {
       });
   };
 
+
+
   // item like {id:77, title : "eat" , isCompleted : false}
-  addItem = item => {
-    let newState = this.state.todos;
-    newState.push(item);
-    this.setState({ todos: newState });
+  addItem = title => {
+    axios.post(`http://localhost:9000/addNewTask`,{
+      
+title     
+    })
+    .then(({data})=> {
+      // console.log(response);
+      this.setState({repos:data})
+    })
   };
+  
 
   render() {
     const { state, edit, deleteItem, addItem } = this;
@@ -78,7 +100,7 @@ class App extends React.Component {
         <button onClick={this.getRequest}>get Request</button>
         <br />
         {/* <button onClick={deleteItem.bind(this, 2)}>deleteItem</button> */}
-        <button
+        {/* <button
           onClick={addItem.bind(this, {
             id: 77,
             title: 'eat',
@@ -86,7 +108,7 @@ class App extends React.Component {
           })}
         >
           AddItem
-        </button>
+        </button> */}
 
         <br />
         <Add addItem={addItem} />

@@ -13,12 +13,19 @@ app.use(function(req, res, next) {
 });
 app.use(express.json());
 
+
+
+
 app.get('/data', (req, res) => {
   DB.abeer(baba => {
     console.log('CALL BACK FROM SERVER');
     res.json(baba);
   });
 });
+
+
+
+
 
 app.post('/addNewTask', (req, res) => {
   let box = req.body;
@@ -29,11 +36,31 @@ app.post('/addNewTask', (req, res) => {
   }, box);
 });
 
+
+
+
+
 app.delete('/delete/:id', (req, res) => {
-  DB.remove(result => {
-    res.json(result);
+
+  DB.remove(item => {
+    res.json(item);
   }, req.params.id);
 });
+
+
+
+
+
+app.put('/edit/:id', (req, res) => {
+
+  DB.update(item => {
+    res.json(item);
+  }, req.params.id);
+});
+
+
+
+
 
 const PORT = 9000;
 app.listen(PORT, () => console.log(`Server listening to ${PORT}`));
